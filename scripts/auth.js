@@ -43,3 +43,37 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+// Simulación de "base de datos" en localStorage
+if (!localStorage.getItem('users')) {
+    localStorage.setItem('users', JSON.stringify({
+        'admin': 'admin123',
+        'usuario': 'clave123'
+    }));
+}
+
+// Función para registrar usuario
+document.addEventListener('DOMContentLoaded', function() {
+    // Manejar registro de nuevo usuario
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newUsername = document.getElementById('newUsername').value;
+            const newPassword = document.getElementById('newPassword').value;
+            
+            const users = JSON.parse(localStorage.getItem('users'));
+            
+            if (users[newUsername]) {
+                document.getElementById('error-message').textContent = 'El usuario ya existe';
+            } else {
+                users[newUsername] = newPassword; // ¡En un caso real, usa hashing!
+                localStorage.setItem('users', JSON.stringify(users));
+                alert('Registro exitoso. Ahora puedes iniciar sesión.');
+                window.location.href = 'login.html';
+            }
+        });
+    }
+
+    // Resto del código (login y logout) permanece igual...
+});
